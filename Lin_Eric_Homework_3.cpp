@@ -12,7 +12,7 @@ int main()
 {
     double iniMoney;    // Initial Money
     double bal;         // Current Balance
-    int trans;          // Number of Transactions
+    int trans = 0;      // Number of Transactions
 
     ifstream inFile;
     ofstream outFile; 
@@ -22,50 +22,53 @@ int main()
     outFile.open("outputValues.txt");
 
     //START HERE
+    if (!inFile || !outFile) 
+    {
+        cout << "Error opening file!" << endl;
+        return 1;
+    }
 
     inFile >> iniMoney;
     bal = iniMoney;
-    int i = 7;
+    
+    char t;             // Transaction type ('W' or 'D')
+    double amount;      // Transaction amount
 
-    while (i > trans) {
-        cout << "Transaction " << (i + 1) << endl;
-        char t;
-        double amount;
+    // Output starting balance to output file
+    outFile << fixed << setprecision(2);
+    outFile << "STARTING BALANCE: $" << iniMoney << endl;
+    outFile << "Type" << setw(12) << "Amount" << setw(20) << "Balance" << endl;
 
-    // Clear instruction for user to select type of transaction
-    cout << "Enter transaction type (d for deposit, w for withdraw): ";
-    cin >> t;
-
-    //Following is for debit
-        if (t == 'w') 
+    // Read transactions until the end of the file
+    while (inFile >> t >> amount) 
     {
-        cout << "Enter withdraw amount: ";
-        cin >> amount;
-    //Subtract for debit
-        bal = bal - amount; 
-        cout << "Balance after transaction " << (i + 1) << ": $" << bal << endl;
-        i = i + 1;  
-    } 
-    //Following is for credit
-        else if (t == 'd') 
+    // Processing the transaction based on type (withdraw or deposit)
+    if (t == 'W') 
     {
-        cout << "Enter deposit amount: ";
-        cin >> amount;
-    //Add for credit
-        bal = bal + amount;  
-        cout << "Balance after transaction: " << (i + 1) << ": $" << bal << endl;
-        i = i + 1;  
-    } else 
+        bal -= amount; 
+    } else if (t == 'D') 
     {
-        cout << "Invalid! Please enter 'w' or 'd'." << endl;
+        bal += amount; 
+    } else {
+        outFile << "Invalid transaction type encountered: " << t << endl;
+        continue;
     }
-}
-    //The Summary for the Required Extra Credit...
-    cout << "End of Day Balance Summary:";
-    cout << "Final balance: $" << bal << endl;
 
-    outFile.close();
-    inFile.close();
+    // Output the transaction and new balance to the output file
+    outFile << t << setw(13) << amount << setw(20) << bal << endl;
+        
+    // Increment transaction count
+    trans++;
+    }
 
-    return 0;
+// Output the final balance and transaction summary
+outFile << "\nEnd of Day Balance Summary:" << endl;
+outFile << "Final balance: $" << bal << endl;
+outFile << "Number of transactions: " << trans << endl;
+
+// Closing files
+outFile.close();
+inFile.close();
+
+return 0;
 }
