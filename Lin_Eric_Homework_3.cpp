@@ -61,14 +61,30 @@ int main()
     trans++;
     }
 
-// Output the final balance and transaction summary
-outFile << "\nEnd of Day Balance Summary:" << endl;
-outFile << "Final balance: $" << bal << endl;
-outFile << "Number of transactions: " << trans << endl;
+    // Output the final balance and transaction summary
+    outFile << "\nEnd of Day Balance Summary:" << endl;
+    outFile << "Final balance: $" << bal << endl;
+    outFile << "Number of transactions: " << trans << endl;
 
-// Closing files
-outFile.close();
-inFile.close();
+    // Closing files
+    outFile.close();
+    inFile.close();
 
-return 0;
+    return 0;
 }
+
+/*
+STARTING BALANCE: $5000.00
+Type      Amount             Balance
+W       200.00             4800.00
+W       800.00             4000.00
+W        40.00             3960.00
+D        90.00             4050.00
+D       100.00             4150.00
+D      1000.00             5150.00
+W        20.00             5130.00
+
+End of Day Balance Summary:
+Final balance: $5130.00
+Number of transactions: 7
+*/
